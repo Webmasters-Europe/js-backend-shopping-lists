@@ -1,0 +1,8 @@
+{
+    "name": "fs-json",
+    "version": "1.0.0",
+    "description": "A small module for CRUD operations on a json shopping list using the fs-module.",
+    "main": "fileSystem.js",
+    "author": "Jonas Jürgens",
+    "license": "ISC"
+}
