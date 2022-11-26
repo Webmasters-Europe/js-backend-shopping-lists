@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/shoppingLists', shoppingListsRouter)
+app.use('/shopping-lists', shoppingListsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
