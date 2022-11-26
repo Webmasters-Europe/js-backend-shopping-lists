@@ -1,0 +1,16 @@
+<form class="auth-container" action="/auth<%= register ? '/register' : '/login' %>" method="POST">
+    <h1><%= register ? 'Register' : 'Login' %></h1>
+    <%- include(`${root}/views/partials/input`, { name: 'username', text: 'Username', type: 'text', required: true }) %>
+    <%- include(`${root}/views/partials/input`, { name: 'password', text: 'Password', type: 'password', required: true }) %>
+    <% if (register) { %>
+        <%- include(`${root}/views/partials/input`, { name: 'confirm-password', text: 'Confirm password', type: 'password', required: true }) %>
+    <% } %>
+    <%- include(
+        `${root}/views/partials/actionsMenu`,
+        register
+            ?
+            { deleteButtonLink: '/auth/login', deleteButtonText: 'Login', submitButton: true, submitButtonText: 'Register' }
+            :
+            { deleteButtonLink: '/auth/register', deleteButtonText: 'Register', submitButton: true, submitButtonText: 'Login' })
+    %>
+</form>
