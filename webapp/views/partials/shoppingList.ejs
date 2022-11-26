@@ -1,0 +1,14 @@
+<div class="list" id="<%= listId %>">
+    <h3 class="list-heading">My List</h3>
+    <div class="list-list-container">
+        <ul class="list-list">
+            <% for (const entry of entries) { %>
+                <%- include(`${root}/views/partials/listEntry`, { entryName: entry.food }) %>
+            <% } %>
+        </ul>
+    </div>
+    <%- include(
+        `${root}/views/partials/actionsMenu`,
+        { deleteButtonLink: '/', deleteButtonText: 'Delete' })
+    %>
+</div>

@@ -1,0 +1,10 @@
+<form class="form">
+    <h3>New shopping list</h3>
+    <div class="form-content">
+        <textarea name="list" placeholder="Cheese, Bread, Water, ..." required></textarea>
+    </div>
+    <%- include(
+        `${root}/views/partials/actionsMenu`,
+        { deleteButtonLink: '/', deleteButtonText: 'Cancel', submitButton: true, submitButtonText: 'Save'})
+    %>
+</form>
