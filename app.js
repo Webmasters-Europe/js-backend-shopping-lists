@@ -4,11 +4,14 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const mongoose = require('mongoose')
 const passport = require('passport')
 require('./config/passport')(passport)
 
 const indexRouter = require('./routes/index')
 const authRouter = require('./routes/auth')
+const apiRouter = require('./routes/api/shoppingLists')
+const apiAuthRouter = require('./routes/api/auth')
 
 const app = express()
 
@@ -23,6 +26,13 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(passport.initialize())
 
+mongoose.connect(process.env.DATABASE_URL)
+const db = mongoose.connection
+db.on('error', error => console.error(error))
+db.once('open', () => console.error('Database connection successful'))
+
+app.use('/api/auth', apiAuthRouter)
+app.use('/api', apiRouter)
 app.use('/auth', authRouter)
 app.use('/', passport.authenticate('jwt', { session: false, failureRedirect: '/auth/login' }), indexRouter)
 
@@ -41,8 +51,6 @@ app.use(function (err, req, res, next) {
 	res.status(err.status || 500)
 	res.render('error')
 })
-
-app.listen(3000)
 
 app.locals.root = __dirname
 

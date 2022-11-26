@@ -1,4 +1,4 @@
-const User = require('../models/user')
+const User = require('../../models/user')
 
 async function usernameAvailable(req, res, next) {
 	const { username } = req.body
@@ -102,8 +102,6 @@ async function allLists(req, res, next) {
 async function idExists(id, userId) {
 	let lists
 	try {
-		console.log(userId)
-		console.log(await User.findOne({ _id: userId }))
 		lists = (await User.findOne({ _id: userId })).lists
 	} catch (err) {
 		throw new Error(err)

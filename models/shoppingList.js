@@ -8,6 +8,10 @@ const shoppingListSchema = new Schema({
 			validator: value => Number.isInteger(Number(value)) && value.length === 6,
 		},
 	},
+	name: {
+		type: String,
+		required: true,
+	},
 	entries: [
 		{
 			type: SchemaTypes.ObjectId,

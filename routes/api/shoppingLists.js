@@ -1,14 +1,14 @@
 const express = require('express')
-const User = require('../models/user')
-const ShoppingList = require('../models/shoppingList')
-const ShoppingListEntry = require('../models/shoppingListEntry')
+const User = require('../../models/user')
+const ShoppingList = require('../../models/shoppingList')
+const ShoppingListEntry = require('../../models/shoppingListEntry')
 const {
 	usernameAvailable,
 	createIdForList,
 	checkListId,
 	checkEntryName,
 	allLists,
-} = require('../middlewares/shoppingLists.middleware')
+} = require('../../middlewares/api/shoppingLists.middleware')
 
 const router = express.Router()
 
@@ -21,11 +21,11 @@ router.get('/:userId', allLists, async (req, res) => {
 })
 
 router.post('/', createIdForList, async (req, res) => {
-	const { userId, id, list } = req.body
+	const { userId, id, list, listName } = req.body
 
 	let shoppingList
 	try {
-		shoppingList = await createShoppingList(id)
+		shoppingList = await createShoppingList(id, listName)
 	} catch (err) {
 		res.status(400).json({ error: err.message })
 		return
@@ -124,9 +124,9 @@ async function shoppingListForId(id, withDependancies = false) {
 	return list
 }
 
-async function createShoppingList(id) {
+async function createShoppingList(id, listName) {
 	try {
-		return await ShoppingList.create({ shoppingListId: id, entries: [] })
+		return await ShoppingList.create({ shoppingListId: id, name: listName, entries: [] })
 	} catch (error) {
 		throw new Error(error.message)
 	}
@@ -180,8 +180,11 @@ async function addShoppingListToUser(shoppingList, user) {
 function shortenedUsersLists(usersLists) {
 	const shortenedLists = []
 	usersLists.forEach(list => {
-		const data = {}
-		data[list.shoppingListId] = shortenEntries(list.entries)
+		const data = {
+			listId: list.shoppingListId,
+			listName: list.name,
+			entries: shortenEntries(list.entries),
+		}
 		shortenedLists.push(data)
 	})
 	return shortenedLists

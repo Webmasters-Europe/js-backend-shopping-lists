@@ -19,7 +19,7 @@ router.post('/login', [validUsername, validPassword], async function (req, res) 
 	}
 	let user
 	try {
-		user = (await (await fetch(`http://localhost:3001/auth/username`, options)).json()).user
+		user = (await (await fetch(`http://localhost:3000/api/auth/username`, options)).json()).user
 	} catch (err) {
 		res.status(400).json({ error: err.message })
 		return
@@ -52,7 +52,7 @@ router.post('/register', [validUsername, validPassword], async function (req, re
 
 	let user
 	try {
-		user = (await (await fetch(`http://localhost:3001/auth/register`, options)).json()).user
+		user = (await (await fetch(`http://localhost:3000/api/auth/register`, options)).json()).user
 	} catch (err) {
 		res.status(400).json({ error: err.message })
 		return

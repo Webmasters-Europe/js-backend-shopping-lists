@@ -17,7 +17,7 @@ module.exports = passport => {
 			}
 			let user
 			try {
-				user = (await (await fetch(`http://localhost:3001/auth/username`, options)).json()).user
+				user = (await (await fetch(`http://localhost:3000/api/auth/username`, options)).json()).user
 			} catch (err) {
 				console.error('Error when configuring passportjs')
 				console.error(err)
