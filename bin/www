@@ -87,4 +87,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+
+  if(typeof addr !== 'string'){
+    debug('http://localhost:' + addr.port);
+  }
 }
