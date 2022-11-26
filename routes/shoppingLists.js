@@ -4,11 +4,14 @@ const ShoppingListEntry = require('./../Models/shoppingListEntry')
 
 const router = express.Router()
 
+var a = 4
+
 router.get('/:id', async (req, res) => {
 	const { id } = req.params
 
 	const shoppingList = await shoppingListForId(id, true)
-	if (shoppingList === null) {
+
+	if (!shoppingList) {
 		res.status(404).json({ error: 'The id does not exist.' })
 		return
 	}
@@ -22,25 +25,27 @@ router.post('/', async (req, res) => {
 	const { id, list } = req.body
 
 	let shoppingList = await shoppingListForId(id)
-	if (shoppingList !== null) {
+
+	if (shoppingList) {
 		res.status(409).json({ error: 'The id is already taken.' })
 		return
 	}
 
 	shoppingList = await createShoppingList(id)
-	if (shoppingList === null) {
+	if (!shoppingList) {
 		res.status(400).json({ error: 'An error occurred while creating new shopping list.' })
 		return
 	}
 
 	const newEntriesIds = await createEntries(list)
+
 	if (newEntriesIds.length === 0) {
 		await ShoppingList.deleteOne({ userId: id })
 		res.status(400).json({ error: 'The shopping list must contain items.' })
 		return
 	}
 
-	await addEntreisToShoppingList(newEntriesIds, shoppingList)
+	await addEntriesToShoppingList(newEntriesIds, shoppingList)
 
 	shoppingList = await shoppingListForId(id, true)
 	const shortenedEntries = shortenEntries(shoppingList.entries)
@@ -53,8 +58,8 @@ router.patch('/:id', async (req, res) => {
 	const { list } = req.body
 
 	let shoppingList = await shoppingListForId(id, true)
-	if (shoppingList === null) {
-		res.status(409).json({ error: 'No list fond for the provided id.' })
+	if (!shoppingList) {
+		res.status(404).json({ error: 'No list found for the provided id.' })
 		return
 	}
 
@@ -68,7 +73,7 @@ router.patch('/:id', async (req, res) => {
 	const entryIds = await resetEntriesOfList(shoppingList)
 	await ShoppingListEntry.deleteMany({ _id: entryIds })
 
-	await addEntreisToShoppingList(newEntriesIds, shoppingList)
+	await addEntriesToShoppingList(newEntriesIds, shoppingList)
 
 	shoppingList = await shoppingListForId(id, true)
 	const shortenedEntries = shortenEntries(shoppingList.entries)
@@ -80,7 +85,7 @@ router.delete('/:id', async (req, res) => {
 	const { id } = req.params
 
 	const shoppingList = await shoppingListForId(id)
-	if (shoppingList === null) {
+	if (!shoppingList) {
 		res.status(404).json({ error: 'The id does not exist.' })
 		return
 	}
@@ -94,14 +99,14 @@ router.delete('/:id/:entryName', async (req, res) => {
 	const { id, entryName } = req.params
 
 	const shoppingList = await shoppingListForId(id, true)
-	if (shoppingList === null) {
+	if (!shoppingList) {
 		res.status(404).json({ error: 'The id does not exist.' })
 		return
 	}
 
 	const entryId = shoppingList.entries.filter(({ food }) => food === entryName.toLowerCase())[0]?.id
 
-	if (entryId === undefined) {
+	if (!entryId) {
 		res.status(404).json({ error: 'The element does not exist.' })
 		return
 	}
@@ -142,7 +147,7 @@ async function createEntries(list) {
 	return entries
 }
 
-async function addEntreisToShoppingList(entriyIds, shoppinglist) {
+async function addEntriesToShoppingList(entriyIds, shoppinglist) {
 	entriyIds.forEach(entryId => shoppinglist.entries.push(entryId))
 	await shoppinglist.save()
 }
