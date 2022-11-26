@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include(`${root}/views/partials/head`, { title: 'Shopping Lists - Dashboard', cssFile: 'index.css', jsFile: 'index.js' }) %>
+    </head>
+    <body>
+        <%- include(`${root}/views/partials/layoutOpen`) %>
+            <%- include(`${root}/views/partials/navbar`, { addButton: true }) %>
+            <div class="lists-container">
+                <% if (typeof list !== 'undefined') { %>
+                    <%- include(`${root}/views/partials/shoppingList`, { list: list}) %>
+                <% } %>
+            </div>
+        <%- include(`${root}/views/partials/layoutClose`) %>
+    </body>
+</html>

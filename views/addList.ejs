@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include(`${root}/views/partials/head`, { title: 'Shopping Lists - Add list', cssFile: 'addList.css', jsFile: 'addList.js' }) %>
+    </head>
+    <body>
+        <%- include(`${root}/views/partials/layoutOpen`) %>
+            <%- include(`${root}/views/partials/navbar`) %>
+            <div class="form-container">
+                <%- include(`${root}/views/partials/listForm`) %>
+            </div>
+        <%- include(`${root}/views/partials/layoutClose`) %>
+    </body>
+</html>
