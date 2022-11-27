@@ -9,13 +9,17 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.3",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
-    "fs-json": "file:fs-json",
     "http-errors": "~1.6.3",
+    "mongoose": "^6.7.2",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "eslint": "^8.28.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "nodemon": "^2.0.20"
   }
 }
