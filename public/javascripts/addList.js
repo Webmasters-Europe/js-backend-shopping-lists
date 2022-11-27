@@ -1,34 +1,32 @@
 function init() {
-	document.querySelector('form').addEventListener('submit', handleSubmit)
+    document.querySelector('form').addEventListener('submit', handleSubmit)
 }
 
 async function handleSubmit(e) {
-	e.preventDefault()
+    e.preventDefault()
 
-	const body = createJSONBody(e.target)
-	const options = {
-		headers: { 'Content-Type': 'application/json' },
-		method: 'POST',
-		body: body,
-	}
+    const body = createJSONBody(e.target)
 
-	const res = await fetch('http://localhost:3000/api', options)
+    const res = await fetch('http://localhost:3000/shoppinglists', {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body,
+    })
 
-	if (`${res.status}`.startsWith('4')) {
-		alert('Error')
-		return
-	}
+    if (`${res.status}`.startsWith('4')) {
+        alert('Error')
+        return
+    }
 
-	location.href = '/'
+    location.href = '/'
 }
 
 function createJSONBody(form) {
-	const data = new FormData(form)
-	const body = {}
-	for (let [key, value] of data) {
-		body[key] = value
-	}
-	return JSON.stringify(body)
+    const data = new FormData(form)
+
+    const body = Object.fromEntries(data)
+
+    return JSON.stringify(body)
 }
 
 init()
