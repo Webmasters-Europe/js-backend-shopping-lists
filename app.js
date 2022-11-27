@@ -27,14 +27,20 @@ if (!process.env.DATABASE_URL) {
     process.exit(1)
 }
 
-mongoose.connect(process.env.DATABASE_URL)
+try {
+    mongoose.connect(process.env.DATABASE_URL)
+} catch (error) {
+    console.error(error)
+    process.exit(1)
+}
+
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.error('Database connection successful'))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/api', apiRouter)
+app.use('/shoppinglists', apiRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
