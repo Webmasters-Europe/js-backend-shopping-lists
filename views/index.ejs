@@ -4,15 +4,12 @@
 		<%- include(`${root}/views/partials/head`, { title: 'Shopping Lists - Dashboard', cssFile:
 		'index.css', jsFile: 'index.js' }) %>
 
-		<script src="https://cdn.tailwindcss.com"></script>
+		<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 	</head>
-	<body>
-		<%- include(`${root}/views/partials/layoutOpen`) %> <%- include(`${root}/views/partials/navbar`, {
-		addButton: true }) %>
-		<div class="lists-container">
-			<% if (typeof list !== 'undefined') { %> <%- include(`${root}/views/partials/shoppingList`, {
-			list: list}) %> <% } %>
+	<body class="flex justify-center p-8 bg-gray-50">
+		<div class="max-w-4xl w-full p-8">
+			<%- include(`${root}/views/partials/navbar`, { addButton: true }) %> <% if (typeof list !==
+			'undefined') { %> <%- include(`${root}/views/partials/shoppingList`, { list: list}) %> <% } %>
 		</div>
-		<%- include(`${root}/views/partials/layoutClose`) %>
 	</body>
 </html>
