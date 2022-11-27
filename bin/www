@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('shopping-lists:server');
-const http = require('http');
+var app = require('../app');
+var debug = require('debug')('shopping-lists:server');
+var http = require('http');
 
 /**
  * Get port from environment and store in Express.

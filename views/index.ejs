@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title><%= title %></title>
-		<script src="https://cdn.tailwindcss.com"></script>
+		<%- include(`${root}/views/partials/head`, { title: 'Shopping Lists - Dashboard', jsFile: 'index.js' }) %>
 	</head>
-	<body class="bg-gray-50">
-		<h1 class="text-3xl text-center font-semibold text-slate-600 mt-12"><%= title %></h1>
-		<p class="text-lg text-center text-slate-600 mt-4">Welcome to <%= title %></p>
+	<body class="flex justify-center p-8 bg-gray-50">
+		<div class="max-w-4xl w-full p-8">
+			<%- include(`${root}/views/partials/navbar`, { addButton: true }) %> <% if (typeof list !==
+			'undefined') { %> <%- include(`${root}/views/partials/shoppingList`, { list: list}) %> <% } %>
+		</div>
 	</body>
 </html>

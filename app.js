@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
-const shoppingListsRouter = require('./routes/shoppingLists')
+const apiRouter = require('./routes/shoppingLists')
 
 const app = express()
 
@@ -27,14 +27,20 @@ if (!process.env.DATABASE_URL) {
     process.exit(1)
 }
 
-mongoose.connect(process.env.DATABASE_URL)
+try {
+    mongoose.connect(process.env.DATABASE_URL)
+} catch (error) {
+    console.error(error)
+    process.exit(1)
+}
+
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.error('Database connection successful'))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/shoppingLists', shoppingListsRouter)
+app.use('/shoppinglists', apiRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -51,5 +57,7 @@ app.use((err, req, res, next) => {
     res.status(err.status || 500)
     res.render('error')
 })
+
+app.locals.root = __dirname
 
 module.exports = app
