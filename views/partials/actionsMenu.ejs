@@ -1,9 +1,0 @@
-<div class="actions">
-    <% if (typeof submitButton !== 'undefined') { %>
-        <input type="submit" value="save" class="button" />
-    <% } %>
-    <%- include(
-        `${root}/views/partials/button`,
-        { link: deleteButtonLink, text: typeof deleteButtonText === 'undefined' ? 'Delete' : deleteButtonText, color: 'red' })
-    %>
-</div>
