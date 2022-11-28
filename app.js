@@ -40,7 +40,7 @@ db.once('open', () => console.error('Database connection successful'))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/shoppinglists', apiRouter)
+app.use('/shopping-lists', apiRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

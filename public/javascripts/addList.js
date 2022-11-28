@@ -7,7 +7,7 @@ async function handleSubmit(e) {
 
     const body = createJSONBody(e.target)
 
-    const res = await fetch('http://localhost:3000/shoppinglists', {
+    const res = await fetch('http://localhost:3000/shopping-lists', {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body,
