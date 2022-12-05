@@ -58,6 +58,4 @@ app.use((err, req, res, next) => {
     res.render('error')
 })
 
-app.locals.root = __dirname
-
 module.exports = app

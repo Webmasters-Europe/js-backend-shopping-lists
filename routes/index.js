@@ -2,14 +2,9 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-    const userData = await (await fetch('http://localhost:3000/shopping-lists/909090')).json()
-
-    res.render('index', { list: userData.entries })
-})
-
-router.get('/addList', (req, res, next) => {
-    res.render('addList')
+/* GET home page. */
+router.get('/', (req, res, next) => {
+    res.render('index', { title: 'Express' })
 })
 
 module.exports = router

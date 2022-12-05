@@ -8,7 +8,6 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params
 
     const shoppingList = await shoppingListForId(id, true)
-
     if (!shoppingList) {
         res.status(404).json({ error: 'The id does not exist.' })
         return
@@ -23,7 +22,6 @@ router.post('/', async (req, res) => {
     const { id, list } = req.body
 
     let shoppingList = await shoppingListForId(id)
-
     if (shoppingList) {
         res.status(409).json({ error: 'The id is already taken.' })
         return
@@ -36,7 +34,6 @@ router.post('/', async (req, res) => {
     }
 
     const newEntriesIds = await createEntries(list)
-
     if (newEntriesIds.length === 0) {
         await ShoppingList.deleteOne({ userId: id })
         res.status(400).json({ error: 'The shopping list must contain items.' })
