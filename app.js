@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
-const apiRouter = require('./routes/shoppingLists')
+const apiRouter = require('./routes/api/shoppingLists')
 
 const app = express()
 
@@ -40,7 +40,7 @@ db.once('open', () => console.error('Database connection successful'))
 
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/shopping-lists', apiRouter)
+app.use('/api', apiRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

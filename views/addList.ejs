@@ -40,7 +40,12 @@
 					<div class="flex justify-end">
                         <div class="flex flex-row space-x-4">
                             <%- include( `${root}/views/partials/link`, { link: '/', text: 'Cancel' }) %>
-                            <%- include( `${root}/views/partials/button`, { submit: true, text: 'Save', color: 'bg-indigo-600 hover:bg-indigo-700 text-white'  }) %>
+                            <button
+                                type="<%= typeof submit !== 'undefined' ? 'submit' : 'button'  %>"
+                                class="inline-flex items-center rounded-md border border-gray-30 px-4 py-2 text-sm font-medium shadow-sm  <%= typeof color !== 'undefined' ? color : 'bg-white hover:bg-gray-50 text-gray-700' %> focus:outline-none"
+                            >
+	                            Save
+                            </button>
                         </div>
 					</div>
 				</form>
