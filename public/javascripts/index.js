@@ -14,7 +14,7 @@ async function deleteList(e) {
         method: 'DELETE',
     }
 
-    await fetch('http://localhost:3000/shopping-lists/909090', options)
+    await fetch('http://localhost:3000/api/909090', options)
 
     window.location.reload()
 }
@@ -28,7 +28,7 @@ async function deleteEntry(e) {
         method: 'DELETE',
     }
 
-    await fetch(`http://localhost:3000/shopping-lists/909090/${entryName}`, options)
+    await fetch(`http://localhost:3000/api/909090/${entryName}`, options)
 
     window.location.reload()
 }
