@@ -5,8 +5,10 @@
 	</head>
 	<body class="flex justify-center p-8 bg-gray-50">
 		<div class="max-w-4xl w-full p-8">
-			<%- include(`${root}/views/partials/navbar`, { addButton: true }) %> <% if (typeof list !==
-			'undefined') { %> <%- include(`${root}/views/partials/shoppingList`, { list: list}) %> <% } %>
+			<%- include(`${root}/views/partials/navbar`, { addLink: true }) %>
+            <% if (typeof list !== 'undefined') { %>
+                <%- include(`${root}/views/partials/shoppingList`, { list: list}) %>
+            <% } %>
 		</div>
 	</body>
 </html>
