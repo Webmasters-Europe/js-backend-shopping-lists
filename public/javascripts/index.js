@@ -5,6 +5,7 @@ function init() {
     if (xButtons.length > 0) {
         xButtons.forEach((button) => button.addEventListener('click', deleteEntry))
     }
+    registerLogoutHandler()
 }
 
 async function deleteList(e) {

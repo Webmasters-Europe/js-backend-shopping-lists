@@ -1,6 +1,13 @@
 const express = require('express')
 const ShoppingList = require('../../models/shoppingList')
 const ShoppingListEntry = require('../../models/shoppingListEntry')
+const {
+    validId,
+    validList,
+    idFree,
+    idTaken,
+    entryExists,
+} = require('../../middlewares/shoppingLists.middleware')
 
 const router = express.Router()
 
@@ -19,17 +26,11 @@ router.get('/:id', async (req, res) => {
     res.json({ id: shoppingList.userId, entries: shortenedEntries })
 })
 
-router.post('/', async (req, res) => {
+router.post('/', [validId, validList, idFree], async (req, res) => {
     const { id, list } = req.body
 
-    let shoppingList = await shoppingListForId(id)
+    let shoppingList = await createShoppingList(id)
 
-    if (shoppingList) {
-        res.status(409).json({ error: 'The id is already taken.' })
-        return
-    }
-
-    shoppingList = await createShoppingList(id)
     if (!shoppingList) {
         res.status(400).json({ error: 'An error occurred while creating new shopping list.' })
         return
@@ -79,7 +80,7 @@ router.patch('/:id', async (req, res) => {
     res.json({ id: shoppingList.userId, entries: shortenedEntries })
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', idTaken, async (req, res) => {
     const { id } = req.params
 
     const shoppingList = await shoppingListForId(id)
@@ -93,7 +94,7 @@ router.delete('/:id', async (req, res) => {
     res.status(204).json()
 })
 
-router.delete('/:id/:entryName', async (req, res) => {
+router.delete('/:id/:entryName', [idTaken, entryExists], async (req, res) => {
     const { id, entryName } = req.params
 
     const shoppingList = await shoppingListForId(id, true)

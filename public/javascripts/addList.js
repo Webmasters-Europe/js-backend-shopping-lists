@@ -1,5 +1,6 @@
 function init() {
     document.querySelector('form').addEventListener('submit', handleSubmit)
+    registerLogoutHandler()
 }
 
 async function handleSubmit(e) {
@@ -18,7 +19,7 @@ async function handleSubmit(e) {
         return
     }
 
-    location.href = '/'
+    window.location.href = '/'
 }
 
 function createJSONBody(form) {
