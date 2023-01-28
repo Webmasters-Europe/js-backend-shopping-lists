@@ -8,5 +8,7 @@ function registerLogoutHandler() {
         }
 
         await fetch('http://localhost:3000/auth/logout', options)
+
+        window.location.href = '/auth/login'
     })
 }
