@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Error</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</head>
+	<body class="p-8 bg-gray-50">
+		<div class="rounded-lg shadow-lg p-8">
+			<h1 class="text-3xl font-semibold text-red-600">
+				<%= message %> - <span class="font-bold"><%= error.status %></span>
+			</h1>
+			<pre class="mt-4 bg-gray-100 p-2"><%= error.stack %></pre>
+		</div>
+	</body>
+</html>

@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# DO not store the DB
+database.json
