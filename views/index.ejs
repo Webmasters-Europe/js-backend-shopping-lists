@@ -6,7 +6,7 @@
 	<body class="flex justify-center p-8 bg-gray-50">
 		<div class="max-w-4xl w-full p-8">
 			<%- include(`${root}/views/partials/navbar`, { addLink: true, username: typeof username !== 'undefined' ? username : 'Username' }) %>
-            <% if (typeof list !== 'undefined') { %>
+            <% if (typeof lists !== 'undefined') { %>
                 <% for (const {listId, listName, entries} of lists) { %>
                     <%- include(
                         `${root}/views/partials/shoppingList`,
