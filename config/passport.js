@@ -8,6 +8,7 @@ const options = {
 module.exports = (passport) => {
     passport.use(
         new JwtStrategy(options, async (jwtPayload, done) => {
+            // TODO: Keine Internen API Calls
             let user
             try {
                 const response = await fetch('http://localhost:3000/api/auth/username', {
