@@ -1,7 +1,9 @@
 function init() {
-    const deleteButton = document.getElementById('Delete')
+    const deleteButtons = Array.from(document.querySelectorAll('#Delete'))
     const xButtons = Array.from(document.querySelectorAll('#X'))
-    if (deleteButton) deleteButton.addEventListener('click', deleteList)
+    if (deleteButtons.length > 0) {
+        deleteButtons.forEach((deleteButton) => deleteButton.addEventListener('click', deleteList))
+    }
     if (xButtons.length > 0) {
         xButtons.forEach((button) => button.addEventListener('click', deleteEntry))
     }
@@ -10,12 +12,13 @@ function init() {
 
 async function deleteList(e) {
     e.preventDefault()
-    const options = {
+
+    const listId = getListId(e.target)
+
+    await fetch(`http://localhost:3000/api/${listId}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
-    }
-
-    await fetch('http://localhost:3000/api/909090', options)
+    })
 
     window.location.reload()
 }
@@ -23,15 +26,22 @@ async function deleteList(e) {
 async function deleteEntry(e) {
     e.preventDefault()
 
+    const listId = getListId(e.target)
     const entryName = getEntryName(e.target)
-    const options = {
+
+    await fetch(`http://localhost:3000/api/${listId}/${entryName}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
-    }
-
-    await fetch(`http://localhost:3000/api/909090/${entryName}`, options)
+    })
 
     window.location.reload()
+}
+
+function getListId(target) {
+    if (target.id && target.id.length === 6 && !Number.isNaN(Number(target.id))) {
+        return target.id
+    }
+    return getListId(target.parentElement)
 }
 
 function getEntryName(target) {

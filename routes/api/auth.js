@@ -1,6 +1,6 @@
 const express = require('express')
-const User = require('../models/user')
-const { userForUsername, usernameAvailable } = require('../middlewares/auth.middleware')
+const User = require('../../models/user')
+const { userForUsername, usernameAvailable } = require('../../middlewares/api/auth.middleware')
 
 const router = express.Router()
 

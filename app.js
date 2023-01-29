@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const apiRouter = require('./routes/api/shoppingLists')
 const authRouter = require('./routes/auth')
+const apiAuthRouter = require('./routes/api/auth')
 
 const app = express()
 
@@ -43,6 +44,7 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.error('Database connection successful'))
 
+app.use('/api/auth', apiAuthRouter)
 app.use('/users', usersRouter)
 app.use('/api', apiRouter)
 app.use('/auth', authRouter)

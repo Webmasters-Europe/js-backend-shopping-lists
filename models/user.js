@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model, SchemaTypes } = require('mongoose')
 
 const userSchema = new Schema({
     username: {
@@ -10,6 +10,12 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
+    },
+    lists: {
+        type: [SchemaTypes.ObjectId],
+        required: true,
+        ref: 'ShoppingList',
+        default: [],
     },
 })
 

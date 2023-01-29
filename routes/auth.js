@@ -14,6 +14,21 @@ router.post('/login', [validUsername, validPassword], async (req, res) => {
     const { username, password } = req.body
 
     const user = await User.findOne({ username })
+
+    // const body = JSON.stringify({ username: username })
+    // const options = {
+    // 	headers: { 'Content-Type': 'application/json' },
+    // 	method: 'POST',
+    // 	body: body,
+    // }
+    // let user
+    // try {
+    // 	user = (await (await fetch(`http://localhost:3000/api/auth/username`, options)).json()).user
+    // } catch (err) {
+    // 	res.status(400).json({ error: err.message })
+    // 	return
+    // }
+
     const correctPassword = await bcrypt.compare(password, user?.password || '')
 
     if (!correctPassword) {
@@ -40,6 +55,21 @@ router.post('/register', [validUsername, usernameAvailable, validPassword], asyn
         res.status(400).json({ error: 'An error occurred while creating the user' })
         return
     }
+
+    // const body = JSON.stringify({ username: username, password: pwHash })
+    // const options = {
+    // 	headers: { 'Content-Type': 'application/json' },
+    // 	method: 'POST',
+    // 	body: body,
+    // }
+
+    // let user
+    // try {
+    // 	user = (await (await fetch(`http://localhost:3000/api/auth/register`, options)).json()).user
+    // } catch (err) {
+    // 	res.status(400).json({ error: err.message })
+    // 	return
+    // }
 
     createAndSetToken(res, { username: user.username })
     res.redirect('/')

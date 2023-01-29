@@ -1,5 +1,4 @@
 const JwtStrategy = require('passport-jwt').Strategy
-const User = require('../models/user')
 
 const options = {
     jwtFromRequest: (req) => req?.cookies.bearer,
@@ -9,12 +8,21 @@ const options = {
 module.exports = (passport) => {
     passport.use(
         new JwtStrategy(options, async (jwtPayload, done) => {
-            const user = await User.findOne({ username: jwtPayload.username })
-            if (user) {
-                return done(null, user)
+            let user
+            try {
+                const response = await fetch('http://localhost:3000/api/auth/username', {
+                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                    body: JSON.stringify({ username: jwtPayload.username }),
+                })
+                user = (await response.json())?.user
+            } catch (err) {
+                console.error('Error when configuring passportjs')
+                console.error(err)
+                return
             }
 
-            return done(null, false)
+            done(null, user || false)
         }),
     )
 }

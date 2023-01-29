@@ -7,7 +7,12 @@
 		<div class="max-w-4xl w-full p-8">
 			<%- include(`${root}/views/partials/navbar`, { addLink: true, username: typeof username !== 'undefined' ? username : 'Username' }) %>
             <% if (typeof list !== 'undefined') { %>
-                <%- include(`${root}/views/partials/shoppingList`, { list: list}) %>
+                <% for (const {listId, listName, entries} of lists) { %>
+                    <%- include(
+                        `${root}/views/partials/shoppingList`,
+                        { listId: listId, listName: listName, entries: entries})
+                        %>
+                <% } %>
             <% } %>
 		</div>
 	</body>

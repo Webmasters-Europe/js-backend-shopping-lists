@@ -1,5 +1,5 @@
-<div class="rounded-lg shadow p-4 flex flex-col max-w-md  space-y-8">
-	<h3 class="text-xl font-semibold text-slate-600">My List</h3>
+<div class="rounded-lg shadow p-4 flex flex-col max-w-md  space-y-8" id="<%= listId %>">
+	<h3 class="text-xl font-semibold text-slate-600"><%= listName %></h3>
 
     <ul class="divide-y divide-gray-200">
         <% for (const entry of list) { %>
@@ -17,5 +17,5 @@
         <% } %>
     </ul>
 
-    <%- include(`${root}/views/partials/link`, { link: '#', text: 'Delete', color: 'bg-red-500 hover:bg-red-600 text-white w-full justify-center' }) %>
+    <%- include(`${root}/views/partials/link`, { link: '/', text: 'Delete', color: 'bg-red-500 hover:bg-red-600 text-white w-full justify-center' }) %>
 </div>

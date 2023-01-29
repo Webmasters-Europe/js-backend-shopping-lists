@@ -1,9 +1,0 @@
-<div class="navbar-container">
-    <div class="navbar">
-        <%- typeof addButton !== 'undefined' ? include(`${root}/views/partials/button`, { link: '/addList', text: 'Add' }) : null %>
-        <div>
-            <h4><%= username %></h4>
-        </div>
-        <%- include(`${root}/views/partials/button`, { link: '/auth/login', text: 'Logout' }) %>
-    </div>
-</div>
