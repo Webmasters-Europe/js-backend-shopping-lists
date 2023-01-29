@@ -3,7 +3,6 @@ const User = require('../../models/user')
 const ShoppingList = require('../../models/shoppingList')
 const ShoppingListEntry = require('../../models/shoppingListEntry')
 const {
-    usernameAvailable,
     createIdForList,
     checkListId,
     checkEntryName,
@@ -32,22 +31,20 @@ router.post('/', createIdForList, async (req, res) => {
         res.status(400).json({ error: err.message })
         return
     }
-    if (shoppingList === null) {
+    if (!shoppingList) {
         res.status(400).json({ error: 'An error occurred while creating new shopping list.' })
         return
     }
 
-    let newEntriesIds
     try {
-        newEntriesIds = await createEntries(list)
-        await addEntreisToShoppingList(newEntriesIds, shoppingList)
+        const newEntriesIds = await createEntries(list)
+        await addEntriesToShoppingList(newEntriesIds, shoppingList)
     } catch (err) {
         res.status(400).json({ error: err.message })
         return
     }
-    let user
     try {
-        user = await User.findOne({ _id: userId })
+        const user = await User.findOne({ _id: userId })
         await addShoppingListToUser(shoppingList, user)
         shoppingList = await shoppingListForId(id, true)
     } catch (err) {
@@ -57,7 +54,7 @@ router.post('/', createIdForList, async (req, res) => {
 
     const shortenedEntries = shortenEntries(shoppingList.entries)
 
-    res.json({ id: shoppingList.userId, entries: shortenedEntries })
+    res.json({ id: shoppingList?.userId, entries: shortenedEntries })
 })
 
 router.patch('/:id', async (req, res) => {
@@ -65,7 +62,7 @@ router.patch('/:id', async (req, res) => {
     const { list } = req.body
 
     let shoppingList = await shoppingListForId(id, true)
-    if (shoppingList === null) {
+    if (!shoppingList) {
         res.status(409).json({ error: 'No list fond for the provided id.' })
         return
     }
@@ -80,12 +77,12 @@ router.patch('/:id', async (req, res) => {
     const entryIds = await resetEntriesOfList(shoppingList)
     await ShoppingListEntry.deleteMany({ _id: entryIds })
 
-    await addEntreisToShoppingList(newEntriesIds, shoppingList)
+    await addEntriesToShoppingList(newEntriesIds, shoppingList)
 
     shoppingList = await shoppingListForId(id, true)
     const shortenedEntries = shortenEntries(shoppingList.entries)
 
-    res.json({ id: shoppingList.userId, entries: shortenedEntries })
+    res.json({ id: shoppingList?.userId, entries: shortenedEntries })
 })
 
 router.delete('/:userId/:listId', checkListId, async (req, res) => {
@@ -117,9 +114,11 @@ router.delete('/:userId/:listId/:entryName', [checkListId, checkEntryName], asyn
 async function shoppingListForId(id, withDependancies = false) {
     let list
     try {
-        list = withDependancies
-            ? await ShoppingList.findOne({ userId: id }).populate('entries')
-            : await ShoppingList.findOne({ userId: id })
+        list = await ShoppingList.findOne({ userId: id })
+
+        if (withDependancies) {
+            list = list?.populate('entries')
+        }
     } catch (err) {
         throw new Error(err)
     }
@@ -149,7 +148,7 @@ async function createEntries(list) {
     return entries
 }
 
-async function addEntreisToShoppingList(entriyIds, shoppinglist) {
+async function addEntriesToShoppingList(entriyIds, shoppinglist) {
     entriyIds.forEach((entryId) => shoppinglist.entries.push(entryId))
     try {
         await shoppinglist.save()

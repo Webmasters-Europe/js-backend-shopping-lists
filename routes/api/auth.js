@@ -5,25 +5,25 @@ const { userForUsername, usernameAvailable } = require('../../middlewares/api/au
 const router = express.Router()
 
 router.post('/username', userForUsername, (req, res) => {
-	const { user } = req.body
-	res.json({ user: user })
+    const { user } = req.body
+    res.json({ user })
 })
 
 router.post('/register', usernameAvailable, async (req, res) => {
-	const { username, password } = req.body
+    const { username, password } = req.body
 
-	let user
-	try {
-		user = await User.create({ username: username, password: password })
-		if (!user) {
-			throw new Error('Could not create user')
-		}
-	} catch (err) {
-		res.status(400).json({ err: err })
-		return
-	}
+    let user
+    try {
+        user = await User.create({ username, password })
+        if (!user) {
+            throw new Error('Could not create user')
+        }
+    } catch (err) {
+        res.status(400).json({ err })
+        return
+    }
 
-	res.json({ user: user })
+    res.json({ user })
 })
 
 module.exports = router

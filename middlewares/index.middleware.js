@@ -1,5 +1,3 @@
-const User = require('../models/user')
-
 function validUsername(req, res, next) {
     const { username } = req.body
     const regex = new RegExp(/^([\w]+){3,}$/)
@@ -8,16 +6,6 @@ function validUsername(req, res, next) {
         return
     }
     req.body.username = username.trim()
-    next()
-}
-
-async function usernameAvailable(req, res, next) {
-    const { username } = req.body
-    const existingUser = await User.findOne({ username })
-    if (existingUser) {
-        res.json({ error: 'Username already taken' })
-        return
-    }
     next()
 }
 
@@ -61,7 +49,6 @@ function validEntryName(req, res, next) {
 
 module.exports = {
     validUsername,
-    usernameAvailable,
     validPassword,
     validList,
     validEntryName,

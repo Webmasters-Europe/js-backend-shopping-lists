@@ -1,9 +1,7 @@
 const express = require('express')
 
-var router = express.Router()
+const router = express.Router()
 const { validList, validEntryName } = require('../middlewares/index.middleware')
-
-var router = express.Router()
 
 router.get('/', async (req, res, next) => {
     const userId = req.user._id
