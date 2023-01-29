@@ -17,10 +17,9 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.7.2",
     "morgan": "~1.9.1",
-    "node-fetch": "^3.3.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0"
-    },
+  },
   "devDependencies": {
     "eslint": "^8.28.0",
     "eslint-config-airbnb-base": "^15.0.0",

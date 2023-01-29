@@ -1,7 +1,6 @@
 const express = require('express')
 
 var router = express.Router()
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
 const { validList, validEntryName } = require('../middlewares/index.middleware')
 
 var router = express.Router()
