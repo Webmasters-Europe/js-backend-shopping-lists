@@ -19,7 +19,7 @@ async function handleSubmit(e) {
         return
     }
 
-    location.href = '/'
+    window.location.href = '/'
 }
 
 function createJSONBody(form) {
