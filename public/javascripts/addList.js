@@ -1,5 +1,6 @@
 function init() {
     document.querySelector('form').addEventListener('submit', handleSubmit)
+    registerLogoutHandler()
 }
 
 async function handleSubmit(e) {

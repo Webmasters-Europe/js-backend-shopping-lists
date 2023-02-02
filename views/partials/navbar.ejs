@@ -8,6 +8,6 @@
         <%- typeof addLink !== 'undefined' ? include(`${root}/views/partials/link`, { link: '/addList',
 		text: 'Add' }) : null %>
 
-        <%- include(`${root}/views/partials/link`, { link: '#', text: 'Logout', color: 'bg-red-500 hover:bg-red-600 text-white' }) %>
+        <%- include(`${root}/views/partials/link`, { link: '/auth/logout', text: 'Logout', color: 'bg-red-500 hover:bg-red-600 text-white' }) %>
 	</div>
 </div>

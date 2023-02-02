@@ -5,9 +5,12 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const mongoose = require('mongoose')
+const passport = require('passport')
+require('./config/passport')(passport)
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
+const authRouter = require('./routes/auth')
 const apiRouter = require('./routes/api/shoppingLists')
 
 const app = express()
@@ -21,6 +24,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(passport.initialize())
 
 if (!process.env.DATABASE_URL) {
     console.error('DATABASE_URL not set')
@@ -38,9 +42,10 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.error('Database connection successful'))
 
-app.use('/', indexRouter)
 app.use('/users', usersRouter)
+app.use('/auth', authRouter)
 app.use('/api', apiRouter)
+app.use('/', passport.authenticate('jwt', { session: false, failureRedirect: '/auth/login' }), indexRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
