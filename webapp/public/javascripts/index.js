@@ -1,6 +1,6 @@
 function init() {
-    const deleteButtons = Array.from(document.querySelectorAll('.actions .button'))
-    const xButtons = Array.from(document.querySelectorAll('li .button'))
+    const deleteButtons = Array.from(document.querySelectorAll('#Delete'))
+    const xButtons = Array.from(document.querySelectorAll('#X'))
     if (deleteButtons.length > 0) {
         deleteButtons.forEach((deleteButton) => deleteButton.addEventListener('click', deleteList))
     }

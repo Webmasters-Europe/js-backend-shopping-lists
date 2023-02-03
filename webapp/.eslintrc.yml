@@ -1,0 +1,14 @@
+env:
+    browser: true
+    commonjs: true
+    es2021: true
+    node: true
+extends: airbnb-base
+overrides: [
+        { files: ['*.js'], rules: { semi: [2, 'never'] } },
+        { files: ['*.js'], rules: { indent: [2, 4] } },
+        { files: ['*.js'], rules: { 'no-use-before-define': 0 } },
+    ]
+parserOptions:
+    ecmaVersion: latest
+rules: {}

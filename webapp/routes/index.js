@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.get('/', async (req, res, next) => {
     const userId = req.user.id
-    const userData = await (await fetch(`http://localhost:3000/api/${userId}`)).json()
+    const userData = await (await fetch(`http://localhost:3001/api/${userId}`)).json()
     res.render('index', { lists: userData.lists, username: req.user.username })
 })
 
@@ -21,7 +21,7 @@ router.post('/addList', validList, async (req, res) => {
         body,
     }
 
-    const result = await (await fetch('http://localhost:3000/api', options)).json()
+    const result = await (await fetch('http://localhost:3001/api', options)).json()
 
     res.json(result)
 })
@@ -34,7 +34,7 @@ router.delete('/:listId', async (req, res) => {
         method: 'DELETE',
     }
 
-    const result = await (await fetch(`http://localhost:3000/api/${userId}/${listId}`, options)).json()
+    const result = await (await fetch(`http://localhost:3001/api/${userId}/${listId}`, options)).json()
 
     res.json(result)
 })
@@ -48,7 +48,7 @@ router.delete('/:listId/:entryName', validEntryName, async (req, res) => {
     }
 
     const result = await (
-        await fetch(`http://localhost:3000/api/${userId}/${listId}/${entryName}`, options)
+        await fetch(`http://localhost:3001/api/${userId}/${listId}/${entryName}`, options)
     ).json()
 
     res.json(result)

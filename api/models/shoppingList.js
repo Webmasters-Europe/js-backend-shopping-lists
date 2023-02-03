@@ -18,7 +18,9 @@ const shoppingListSchema = new Schema({
 })
 
 shoppingListSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
-    await model('ShoppingListEntry').deleteMany({ shoppingListSchema: this._id })
+    for (entry of this.entries) {
+        await entry.deleteOne()
+    }
     next()
 })
 
