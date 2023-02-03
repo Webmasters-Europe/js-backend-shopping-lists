@@ -1,78 +1,115 @@
-const ShoppingList = require('../models/shoppingList')
+const User = require('../models/user')
 
-function validId(req, res, next) {
-	const id = req.body?.id || req.params?.id
-	if (!(typeof id === 'string' && id.trim().length === 6 && !isNaN(Number(id)))) {
-		res.status(422).json({ error: 'Invalid UserID' })
-		return
-	}
-	next()
+async function usernameAvailable(req, res, next) {
+    const { username } = req.body
+    const existingUser = await User.findOne({ username })
+    if (existingUser) {
+        res.json({ error: 'Username already taken' })
+        return
+    }
+    next()
 }
 
-function validList(req, res, next) {
-	let list = req.body?.list|| req.params?.list
-	list = list
-		.split(',')
-		.map(elem => String(elem).trim())
-		.filter(elem => elem !== '')
-	if (list.length <= 0) {
-		res.status(422).json({ error: 'List does not contain valid items' })
-		return
-	}
-	req.body.list ? (req.body.list = list) : (req.params.list = list)
-	next()
+async function createIdForList(req, res, next) {
+    const { userId } = req.body
+    let potentialId
+    let idInvalid
+    do {
+        potentialId = makeSixDigits(randomId())
+        idInvalid = await idExists(potentialId, userId)
+    } while (idInvalid)
+    req.body.id = potentialId
+    next()
 }
 
-async function idFree(req, res, next) {
-	const id = req.body?.id || req.params?.id
-	if (await idExists(id)) {
-		res.status(409).json({ error: 'The id is already taken.' })
-		return
-	}
-	next()
+async function checkListId(req, res, next) {
+    const { userId, listId } = req.params
+
+    const usersLists = await completeListsFor(userId)
+    if (!usersLists || usersLists.length === 0) {
+        res.status(404).json({ error: 'No lists found for user' })
+        return
+    }
+
+    const targetList = usersListForId(listId, usersLists)
+    if (!targetList || targetList.length === 0) {
+        res.status(404).json({ error: 'Selected list not found' })
+        return
+    }
+
+    req.list = targetList
+
+    next()
 }
 
-async function idTaken(req, res, next) {
-	const id = req.body?.id || req.params?.id
-	if (!(await idExists(id))) {
-		res.status(404).json({ error: 'The id does not exist.' })
-		return
-	}
-	next()
+async function checkEntryName(req, res, next) {
+    const { entryName } = req.params
+    const { list } = req
+
+    const targetEntry = entryWithName(entryName, list)
+    if (!targetEntry) {
+        res.status(404).json({ error: 'Selected entry not found' })
+        return
+    }
+
+    req.entry = targetEntry
+
+    next()
 }
 
-async function entryExists(req, res, next) {
-	const id = req.body?.id || req.params?.id
-	const entryName = req.params.entryName
+async function allLists(req, res, next) {
+    const { userId } = req.params
 
-	const shoppingList = await shoppingListForId(id, true)
-	const entryId = shoppingList.entries.filter(({ food }) => food === entryName.toLowerCase())[0]?.id
+    const usersLists = await completeListsFor(userId)
+    if (!usersLists || usersLists.length === 0) {
+        res.status(404).json({ error: 'No lists found for user' })
+        return
+    }
 
-	if (entryId === undefined) {
-		res.status(404).json({ error: 'The element does not exist.' })
-		return
-	}
+    req.lists = usersLists
 
-	next()
+    next()
 }
-
 
 // --------------------------------- helper ---------------------------------
-async function shoppingListForId(id, withDependancies = false) {
-	return withDependancies
-		? await ShoppingList.findOne({ userId: id }).populate('entries')
-		: await ShoppingList.findOne({ userId: id })
+
+async function idExists(id, userId) {
+    const { lists } = await User.findOne({ _id: userId })
+    return lists.some((objectId) => {
+        objectId.toHexString() === id
+    })
 }
 
-async function idExists(id) {
-	let shoppingList = await shoppingListForId(id)
-	return shoppingList !== null
+function randomId() {
+    return String(Math.floor(Math.random() * 1000000))
+}
+
+function makeSixDigits(num) {
+    if (num.length === 6) return num
+
+    return makeSixDigits(`0${num}`)
+}
+
+async function completeListsFor(userId) {
+    const usersLists = (await User.findOne({ _id: userId }).populate('lists')).lists
+    for (const index in usersLists) {
+        usersLists[index] = await usersLists[index].populate('entries')
+    }
+    return usersLists
+}
+
+function usersListForId(listId, usersLists) {
+    return usersLists.filter((list) => list.shoppingListId === listId)[0]
+}
+
+function entryWithName(entryName, targetList) {
+    return targetList.entries.filter((entry) => entry.food === entryName)[0]
 }
 
 module.exports = {
-	validId,
-	validList,
-	idFree,
-	idTaken,
-	entryExists,
+    usernameAvailable,
+    createIdForList,
+    checkListId,
+    checkEntryName,
+    allLists,
 }

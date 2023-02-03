@@ -1,7 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const { validUsername, usernameAvailable, validPassword } = require('../middlewares/index.middleware')
+const { validUsername, validPassword } = require('../middlewares/index.middleware')
 const User = require('../models/user')
 
 const router = express.Router()
@@ -29,7 +29,7 @@ router.get('/register', (req, res, next) => {
     res.render('auth', { register: true })
 })
 
-router.post('/register', [validUsername, usernameAvailable, validPassword], async (req, res, next) => {
+router.post('/register', [validUsername, validPassword], async (req, res, next) => {
     const { username, password } = req.body
     const pwHash = await bcrypt.hash(password, 10)
     let user

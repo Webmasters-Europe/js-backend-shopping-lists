@@ -5,10 +5,14 @@
 	</head>
 	<body class="flex justify-center p-8 bg-gray-50">
 		<div class="max-w-4xl w-full p-8">
-			<%- include(`${root}/views/partials/navbar`, { addLink: true }) %>
-            <% if (typeof list !== 'undefined') { %>
-                <%- include(`${root}/views/partials/shoppingList`, { list: list}) %>
+            <%- include(`${root}/views/partials/navbar`, { addLink: true }) %>
+            <% if (typeof lists !== 'undefined') { %>
+                <% for (const list of lists) { %>
+                    <% for (const [listId, entries] of Object.entries(list)) { %>
+                        <%- include(`${root}/views/partials/shoppingList`, { listId: listId, entries: entries}) %>
+                    <% } %>
+                <% } %>
             <% } %>
-		</div>
+        </div>
 	</body>
 </html>

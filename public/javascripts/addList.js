@@ -8,7 +8,7 @@ async function handleSubmit(e) {
 
     const body = createJSONBody(e.target)
 
-    const res = await fetch('http://localhost:3000/api', {
+    const res = await fetch('http://localhost:3000/addList', {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body,
