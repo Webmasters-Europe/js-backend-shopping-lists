@@ -57,34 +57,6 @@ router.post('/', createIdForList, async (req, res) => {
     res.json({ id: shoppingList.userId, entries: shortenedEntries })
 })
 
-router.patch('/:id', async (req, res) => {
-    const { id } = req.params
-    const { list } = req.body
-
-    let shoppingList = await shoppingListForId(id, true)
-    if (!shoppingList) {
-        res.status(404).json({ error: 'No list found for the provided id.' })
-        return
-    }
-
-    const newEntriesIds = await createEntries(list)
-    if (newEntriesIds.length === 0) {
-        await ShoppingList.deleteOne({ userId: id })
-        res.status(400).json({ error: 'The shopping list must contain items.' })
-        return
-    }
-
-    const entryIds = await resetEntriesOfList(shoppingList)
-    await ShoppingListEntry.deleteMany({ _id: entryIds })
-
-    await addEntriesToShoppingList(newEntriesIds, shoppingList)
-
-    shoppingList = await shoppingListForId(id, true)
-    const shortenedEntries = shortenEntries(shoppingList.entries)
-
-    res.json({ id: shoppingList.userId, entries: shortenedEntries })
-})
-
 router.delete('/:userId/:listId', checkListId, async (req, res) => {
     const { list } = req
 
