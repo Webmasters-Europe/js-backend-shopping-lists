@@ -2,7 +2,6 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { validUsername, validPassword } = require('../middlewares/index.middleware')
-const User = require('../models/user')
 
 const router = express.Router()
 
@@ -12,8 +11,20 @@ router.get('/login', (req, res, next) => {
 
 router.post('/login', [validUsername, validPassword], async (req, res) => {
     const { username, password } = req.body
+    const body = JSON.stringify({ username })
+    const options = {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body,
+    }
+    let user
+    try {
+        user = (await (await fetch('http://localhost:3001/auth/username', options)).json()).user
+    } catch (err) {
+        res.status(400).json({ error: err.message })
+        return
+    }
 
-    const user = await User.findOne({ username })
     const correctPassword = await bcrypt.compare(password, user?.password || '')
 
     if (!correctPassword) {
@@ -32,12 +43,18 @@ router.get('/register', (req, res, next) => {
 router.post('/register', [validUsername, validPassword], async (req, res, next) => {
     const { username, password } = req.body
     const pwHash = await bcrypt.hash(password, 10)
+    const body = JSON.stringify({ username, password: pwHash })
+    const options = {
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        body,
+    }
+
     let user
     try {
-        user = await User.create({ username, password: pwHash })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({ error: 'An error occurred while creating the user' })
+        user = (await (await fetch('http://localhost:3001/auth/register', options)).json()).user
+    } catch (err) {
+        res.status(400).json({ error: err.message })
         return
     }
 

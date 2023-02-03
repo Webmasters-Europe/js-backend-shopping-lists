@@ -7,6 +7,7 @@ const logger = require('morgan')
 const mongoose = require('mongoose')
 
 const apiRouter = require('./routes/shoppingLists')
+const authRouter = require('./routes/auth')
 
 const app = express()
 
@@ -36,6 +37,7 @@ const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.error('Database connection successful'))
 
+app.use('/auth', authRouter)
 app.use('/api', apiRouter)
 
 // catch 404 and forward to error handler

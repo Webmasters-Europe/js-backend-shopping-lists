@@ -15,7 +15,6 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.7.2",
     "morgan": "~1.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1"

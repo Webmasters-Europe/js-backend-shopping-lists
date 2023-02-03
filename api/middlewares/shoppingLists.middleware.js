@@ -1,64 +1,47 @@
 const User = require('../models/user')
 
-async function usernameAvailable(req, res, next) {
-	const { username } = req.body
-	let existingUser
-	try {
-		existingUser = await User.findOne({ username: username })
-	} catch (err) {
-		res.status(400).json({ error: err.message })
-		return
-	}
-
-	if (existingUser) {
-		res.status(400).json({ error: 'Username already taken' })
-		return
-	}
-	next()
-}
-
 async function createIdForList(req, res, next) {
-	const userId = req.body.userId
-	let potentialId
-	let idInvalid
-	do {
-		potentialId = makeSixDigits(randomId())
-		try {
-			idInvalid = await idExists(potentialId, userId)
-		} catch (err) {
-			res.status(400).json({ error: err.message })
-			return
-		}
-	} while (idInvalid)
-	req.body.id = potentialId
-	next()
+    const { userId } = req.body
+    let potentialId
+    let idInvalid
+    do {
+        potentialId = makeSixDigits(randomId())
+        try {
+            idInvalid = await idExists(potentialId, userId)
+        } catch (err) {
+            res.status(400).json({ error: err.message })
+            return
+        }
+    } while (idInvalid)
+    req.body.id = potentialId
+    next()
 }
 
 async function checkListId(req, res, next) {
-	const { userId, listId } = req.params
+    const { userId, listId } = req.params
 
-	let usersLists
-	try {
-		usersLists = await completeListsFor(userId)
-	} catch (err) {
-		res.status(400).json({ error: err.message })
-		return
-	}
+    let usersLists
+    try {
+        usersLists = await completeListsFor(userId)
+    } catch (err) {
+        res.status(400).json({ error: err.message })
+        return
+    }
 
-	if (!usersLists || usersLists.length === 0) {
-		res.status(404).json({ error: 'No lists found for user' })
-		return
-	}
+    if (!usersLists || usersLists.length === 0) {
+        res.status(404).json({ error: 'No lists found for user' })
+        return
+    }
 
-	const targetList = usersListForId(listId, usersLists)
-	if (!targetList || targetList.length === 0) {
-		res.status(404).json({ error: 'Selected list not found' })
-		return
-	}
+    const targetList = usersListForId(listId, usersLists)
+    if (!targetList || targetList.length === 0) {
+        res.status(404).json({ error: 'Selected list not found' })
+        return
+    }
 
-	req.list = targetList
+    req.list = targetList
 
-	next()
+    next()
 }
 
 async function checkEntryName(req, res, next) {
@@ -77,39 +60,39 @@ async function checkEntryName(req, res, next) {
 }
 
 async function allLists(req, res, next) {
-	const userId = req.params.userId
+    const { userId } = req.params
 
-	let usersLists
-	try {
-		usersLists = await completeListsFor(userId)
-	} catch (err) {
-		res.status(400).json({ error: err.message })
-		return
-	}
+    let usersLists
+    try {
+        usersLists = await completeListsFor(userId)
+    } catch (err) {
+        res.status(400).json({ error: err.message })
+        return
+    }
 
-	if (!usersLists || usersLists.length === 0) {
-		res.status(404).json({ error: 'No lists found for user' })
-		return
-	}
+    if (!usersLists || usersLists.length === 0) {
+        res.status(404).json({ error: 'No lists found for user' })
+        return
+    }
 
-	req.lists = usersLists
+    req.lists = usersLists
 
-	next()
+    next()
 }
 
 // --------------------------------- helper ---------------------------------
 
 async function idExists(id, userId) {
-	let lists
-	try {
-		lists = (await User.findOne({ id: userId })).lists
-	} catch (err) {
-		throw new Error(err)
-	}
+    let lists
+    try {
+        lists = (await User.findOne({ _id: userId })).lists
+    } catch (err) {
+        throw new Error(err)
+    }
 
-	return lists.some(objectId => {
-		objectId.toHexString() === id
-	})
+    return lists.some((objectId) => {
+        objectId.toHexString() === id
+    })
 }
 
 function randomId() {
@@ -123,20 +106,20 @@ function makeSixDigits(num) {
 }
 
 async function completeListsFor(userId) {
-	let usersLists
-	try {
-		usersLists = (await User.findOne({ id: userId }).populate('lists')).lists
-	} catch (err) {
-		throw new Error(err)
-	}
-	for (let index in usersLists) {
-		try {
-			usersLists[index] = await usersLists[index].populate('entries')
-		} catch (err) {
-			throw new Error(err)
-		}
-	}
-	return usersLists
+    let usersLists
+    try {
+        usersLists = (await User.findOne({ _id: userId }).populate('lists')).lists
+    } catch (err) {
+        throw new Error(err)
+    }
+    for (const index in usersLists) {
+        try {
+            usersLists[index] = await usersLists[index].populate('entries')
+        } catch (err) {
+            throw new Error(err)
+        }
+    }
+    return usersLists
 }
 
 function usersListForId(listId, usersLists) {
@@ -148,7 +131,6 @@ function entryWithName(entryName, targetList) {
 }
 
 module.exports = {
-    usernameAvailable,
     createIdForList,
     checkListId,
     checkEntryName,
