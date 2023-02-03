@@ -1,5 +1,5 @@
 const { Schema, model, SchemaTypes } = require('mongoose')
-
+//
 const shoppingListSchema = new Schema({
     shoppingListId: {
         type: String,
