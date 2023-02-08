@@ -7,8 +7,8 @@ const options = {
 
 module.exports = (passport) => {
     passport.use(
-        new JwtStrategy(options, async (jwt_payload, done) => {
-            const body = JSON.stringify({ username: jwt_payload.username })
+        new JwtStrategy(options, async (jwtPayload, done) => {
+            const body = JSON.stringify({ username: jwtPayload.username })
             const options = {
                 headers: { 'Content-Type': 'application/json' },
                 method: 'POST',

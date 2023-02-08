@@ -21,6 +21,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use(passport.initialize())
+
 if (!process.env.DATABASE_URL) {
     console.error('DATABASE_URL not set')
     process.exit(1)
