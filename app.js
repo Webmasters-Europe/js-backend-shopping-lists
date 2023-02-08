@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
 const apiRouter = require('./routes/api/shoppingLists')
+const authRouter = require('./routes/auth')
 
 const app = express()
 
@@ -24,6 +25,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(passport.initialize())
+
 app.use(passport.initialize())
 
 if (!process.env.DATABASE_URL) {

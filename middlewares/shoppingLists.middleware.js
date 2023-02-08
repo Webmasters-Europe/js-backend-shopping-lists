@@ -2,7 +2,7 @@ const ShoppingList = require('../models/shoppingList')
 
 function validId(req, res, next) {
 	const id = req.body?.id || req.params?.id
-	if (!(typeof id === 'string' && id.trim().length === 6 && !isNaN(Number(id)))) {
+	if (!(typeof id === 'string' && id.trim().length === 6 && !Number.isNaN(Number(id)))) {
 		res.status(422).json({ error: 'Invalid UserID' })
 		return
 	}
@@ -43,7 +43,7 @@ async function idTaken(req, res, next) {
 
 async function entryExists(req, res, next) {
 	const id = req.body?.id || req.params?.id
-	const entryName = req.params.entryName
+	const { entryName } = req.params
 
 	const shoppingList = await shoppingListForId(id, true)
 	const entryId = shoppingList.entries.filter(({ food }) => food === entryName.toLowerCase())[0]?.id
@@ -56,12 +56,15 @@ async function entryExists(req, res, next) {
 	next()
 }
 
-
 // --------------------------------- helper ---------------------------------
 async function shoppingListForId(id, withDependancies = false) {
-	return withDependancies
-		? await ShoppingList.findOne({ userId: id }).populate('entries')
-		: await ShoppingList.findOne({ userId: id })
+    let shoppingList = await ShoppingList.findOne({ userId: id })
+
+    if (withDependancies) {
+        shoppingList = shoppingList.populate('entries')
+    }
+
+    return shoppingList
 }
 
 async function idExists(id) {

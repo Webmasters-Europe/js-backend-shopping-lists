@@ -8,8 +8,8 @@ const options = {
 
 module.exports = (passport) => {
     passport.use(
-        new JwtStrategy(options, async (jwt_payload, done) => {
-            const user = await User.findOne({ username: jwt_payload.username })
+        new JwtStrategy(options, async (jwtPayload, done) => {
+            const user = await User.findOne({ username: jwtPayload.username })
             if (user) {
                 return done(null, user)
             }

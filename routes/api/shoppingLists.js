@@ -2,11 +2,11 @@ const express = require('express')
 const ShoppingList = require('../../models/shoppingList')
 const ShoppingListEntry = require('../../models/shoppingListEntry')
 const {
-	validId,
-	validList,
-	idFree,
-	idTaken,
-	entryExists,
+    validId,
+    validList,
+    idFree,
+    idTaken,
+    entryExists,
 } = require('../../middlewares/shoppingLists.middleware')
 
 const router = express.Router()
@@ -27,17 +27,18 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', [validId, validList, idFree], async (req, res) => {
-	const { id, list } = req.body
+  const { id, list } = req.body
 
-	let shoppingList = await createShoppingList(id)
-	if (shoppingList === null) {
-		res.status(400).json({ error: 'An error occurred while creating new shopping list.' })
-		return
-	}
+  let shoppingList = await createShoppingList(id)
 
-	const newEntriesIds = await createEntries(list)
+  if (!shoppingList) {
+      res.status(400).json({ error: 'An error occurred while creating new shopping list.' })
+      return
+  }
 
-	await addEntriesToShoppingList(newEntriesIds, shoppingList)
+  const newEntriesIds = await createEntries(list)
+
+  await addEntriesToShoppingList(newEntriesIds, shoppingList)
 
 	shoppingList = await shoppingListForId(id, true)
 	const shortenedEntries = shortenEntries(shoppingList.entries)
@@ -74,7 +75,7 @@ router.patch('/:id', async (req, res) => {
 })
 
 router.delete('/:id', idTaken, async (req, res) => {
-	const { id } = req.params
+  const { id } = req.params
 
 	const shoppingList = await shoppingListForId(id)
 	await shoppingList.deleteOne({ userId: id })
@@ -86,7 +87,13 @@ router.delete('/:id/:entryName', [idTaken, entryExists], async (req, res) => {
 	const { id, entryName } = req.params
 
 	const shoppingList = await shoppingListForId(id, true)
-	const entryId = shoppingList.entries.filter(({ food }) => food === entryName.toLowerCase())[0]?.id
+  
+  if (!shoppingList) {
+      res.status(404).json({ error: 'The id does not exist.' })
+      return
+  }
+	
+  const entryId = shoppingList.entries.filter(({ food }) => food === entryName.toLowerCase())[0]?.id
 
 	const entryToDelete = await ShoppingListEntry.findOne({ _id: entryId })
 	await entryToDelete.remove()
