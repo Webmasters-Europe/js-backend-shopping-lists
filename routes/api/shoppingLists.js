@@ -102,12 +102,21 @@ router.delete('/:id/:entryName', [idTaken, entryExists], async (req, res) => {
 })
 
 async function shoppingListForId(id, withDependancies = false) {
-    const shoppingList = await ShoppingList.findOne({ userId: id })
+    let shoppingList = null
 
-    return withDependancies && shoppingList
-        ? shoppingList.populate('entries')
-        : shoppingList
+    try {
+        shoppingList = await ShoppingList.findOne({ userId: id })
+
+        if (withDependancies) {
+            shoppingList = await shoppingList.populate('entries')
+        }
+    } catch (error) {
+        throw new Error(error)
+    }
+
+    return shoppingList
 }
+
 
 async function createShoppingList(id) {
     try {
