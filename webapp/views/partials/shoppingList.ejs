@@ -1,0 +1,21 @@
+<div id="<%= listId %>" class="rounded-lg shadow p-4 flex flex-col max-w-md space-y-8 bg-white">
+	<h3 class="text-xl font-semibold text-slate-600">My List</h3>
+
+    <ul class="divide-y divide-gray-200">
+        <% for (const entry of entries) { %>
+            <li class="py-4">
+                <div class="flex items-center space-x-12">
+                    <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-medium text-gray-900"><%= entry.food %></p>
+                    </div>
+                    <div>
+                        <%- include(`${root}/views/partials/link`, { link: '#', text: 'X',
+                        color: ' rounded-full bg-white px-2.5 py-0.5 text-sm leading-5 text-gray-700 shadow-sm hover:bg-gray-50'}) %>
+                    </div>
+                </div>
+            </li>
+        <% } %>
+    </ul>
+
+    <%- include(`${root}/views/partials/link`, { link: '#', text: 'Delete', color: 'bg-red-500 hover:bg-red-600 text-white w-full justify-center' }) %>
+</div>
