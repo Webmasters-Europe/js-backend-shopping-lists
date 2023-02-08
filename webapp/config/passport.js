@@ -8,26 +8,21 @@ const options = {
 module.exports = (passport) => {
     passport.use(
         new JwtStrategy(options, async (jwtPayload, done) => {
-            const body = JSON.stringify({ username: jwtPayload.username })
-            const options = {
-                headers: { 'Content-Type': 'application/json' },
-                method: 'POST',
-                body,
-            }
             let user
             try {
-                user = (await (await fetch('http://localhost:3001/auth/username', options)).json()).user
+                const response = await fetch('http://localhost:3001/auth/username', {
+                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                    body: JSON.stringify({ username: jwtPayload.username }),
+                })
+                user = (await response.json())?.user
             } catch (err) {
                 console.error('Error when configuring passportjs')
                 console.error(err)
                 return
             }
 
-            if (user) {
-                return done(null, user)
-            }
-
-            return done(null, false)
+            done(null, user || false)
         }),
     )
 }

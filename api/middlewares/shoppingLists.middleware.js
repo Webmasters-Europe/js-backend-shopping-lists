@@ -90,9 +90,7 @@ async function idExists(id, userId) {
         throw new Error(err)
     }
 
-    return lists.some((objectId) => {
-        objectId.toHexString() === id
-    })
+    return lists.some((objectId) => objectId.toHexString() === id)
 }
 
 function randomId() {
@@ -114,7 +112,7 @@ async function completeListsFor(userId) {
     }
     for (const index in usersLists) {
         try {
-            usersLists[index] = await usersLists[index].populate('entries')
+            usersLists[index] = await usersLists[index]?.populate('entries')
         } catch (err) {
             throw new Error(err)
         }

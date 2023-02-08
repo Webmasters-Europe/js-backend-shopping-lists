@@ -14,12 +14,11 @@ async function deleteList(e) {
     e.preventDefault()
 
     const listId = getListId(e.target)
-    const options = {
+
+    await fetch(`http://localhost:3000/${listId}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
-    }
-
-    await fetch(`http://localhost:3000/${listId}`, options)
+    })
 
     window.location.reload()
 }
@@ -29,12 +28,11 @@ async function deleteEntry(e) {
 
     const listId = getListId(e.target)
     const entryName = getEntryName(e.target)
-    const options = {
+
+    await fetch(`http://localhost:3000/${listId}/${entryName}`, {
         headers: { 'Content-Type': 'application/json' },
         method: 'DELETE',
-    }
-
-    await fetch(`http://localhost:3000/${listId}/${entryName}`, options)
+    })
 
     window.location.reload()
 }
@@ -44,7 +42,7 @@ function getEntryName(target) {
 }
 
 function getListId(target) {
-    if (target.id && target.id.length === 6 && !isNaN(Number(target.id))) {
+    if (target.id && target.id.length === 6 && !Number.isNaN(Number(target.id))) {
         return target.id
     }
     return getListId(target.parentElement)

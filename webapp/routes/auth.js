@@ -11,15 +11,14 @@ router.get('/login', (req, res, next) => {
 
 router.post('/login', [validUsername, validPassword], async (req, res) => {
     const { username, password } = req.body
-    const body = JSON.stringify({ username })
-    const options = {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-        body,
-    }
     let user
     try {
-        user = (await (await fetch('http://localhost:3001/auth/username', options)).json()).user
+        const response = await fetch('http://localhost:3001/auth/username', {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            body: JSON.stringify({ username }),
+        })
+        user = (await response.json())?.user
     } catch (err) {
         res.status(400).json({ error: err.message })
         return
@@ -43,16 +42,16 @@ router.get('/register', (req, res, next) => {
 router.post('/register', [validUsername, validPassword], async (req, res, next) => {
     const { username, password } = req.body
     const pwHash = await bcrypt.hash(password, 10)
-    const body = JSON.stringify({ username, password: pwHash })
-    const options = {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-        body,
-    }
 
     let user
     try {
-        user = (await (await fetch('http://localhost:3001/auth/register', options)).json()).user
+        const response = await fetch('http://localhost:3001/auth/register', {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            body: JSON.stringify({ username, password: pwHash }),
+        })
+
+        user = (await response.json())?.user
     } catch (err) {
         res.status(400).json({ error: err.message })
         return
