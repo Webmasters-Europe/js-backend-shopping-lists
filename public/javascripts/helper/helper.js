@@ -2,12 +2,10 @@ function registerLogoutHandler() {
     const logoutButton = document.getElementById('Logout')
 
     logoutButton.addEventListener('click', async () => {
-        const options = {
+        await fetch('http://localhost:3000/auth/logout', {
             headers: { 'Content-Type': 'application/json' },
             method: 'POST',
-        }
-
-        await fetch('http://localhost:3000/auth/logout', options)
+        })
 
         window.location.href = '/auth/login'
     })

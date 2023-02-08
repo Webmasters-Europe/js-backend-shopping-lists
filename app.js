@@ -10,6 +10,7 @@ require('./config/passport')(passport)
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
+const authRouter = require('./routes/auth')
 const apiRouter = require('./routes/api/shoppingLists')
 const authRouter = require('./routes/auth')
 
@@ -24,6 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(passport.initialize())
 
 app.use(passport.initialize())
 
@@ -44,8 +46,8 @@ db.on('error', (error) => console.error(error))
 db.once('open', () => console.error('Database connection successful'))
 
 app.use('/users', usersRouter)
-app.use('/api', apiRouter)
 app.use('/auth', authRouter)
+app.use('/api', apiRouter)
 app.use('/', passport.authenticate('jwt', { session: false, failureRedirect: '/auth/login' }), indexRouter)
 
 // catch 404 and forward to error handler

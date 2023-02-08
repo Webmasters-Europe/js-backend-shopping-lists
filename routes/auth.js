@@ -1,10 +1,10 @@
 const express = require('express')
-
-const router = express.Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/user')
 const { validUsername, usernameAvailable, validPassword } = require('../middlewares/index.middleware')
+const User = require('../models/user')
+
+const router = express.Router()
 
 router.get('/login', (req, res, next) => {
     res.render('auth', { register: false })
