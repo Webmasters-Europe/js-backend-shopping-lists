@@ -142,7 +142,7 @@ async function shoppingListForId(id, withDependancies = false) {
     try {
         shoppingList = await ShoppingList.findOne({ userId: id })
 
-        if (withDependancies) {
+        if (shoppingList && withDependancies) {
             shoppingList = await shoppingList.populate('entries')
         }
     } catch (error) {

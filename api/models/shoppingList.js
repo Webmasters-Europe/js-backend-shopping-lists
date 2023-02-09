@@ -18,7 +18,7 @@ const shoppingListSchema = new Schema({
 })
 
 shoppingListSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
-    for (entry of this.entries) {
+    for (const entry of this.entries) {
         await entry.deleteOne()
     }
     next()
