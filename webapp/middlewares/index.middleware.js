@@ -9,6 +9,17 @@ function validUsername(req, res, next) {
     next()
 }
 
+function checkShareWith(req, res, next) {
+    let { shareWith } = req.body
+
+    shareWith = shareWith.split(',')
+        .map((elem) => String(elem).trim())
+        .filter((elem) => elem !== '')
+
+    req.body.shareWith = shareWith
+    next()
+}
+
 function validPassword(req, res, next) {
     const { password } = req.body
     const regex = new RegExp(/^(?=.*?[\w]+)(?=.*?[!$_?]+).{8,}$/)
@@ -49,6 +60,7 @@ function validEntryName(req, res, next) {
 
 module.exports = {
     validUsername,
+    checkShareWith,
     validPassword,
     validList,
     validEntryName,

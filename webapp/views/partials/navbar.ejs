@@ -4,6 +4,9 @@
 			Shopping Lists
 		</h2>
 	</div>
+    <div class="mt-4 flex md:mt-0 md:ml-4 space-x-4">
+        <p id="username"><%= username %></p>
+    </div>
 	<div class="mt-4 flex md:mt-0 md:ml-4 space-x-4">
         <%- typeof addLink !== 'undefined' ? include(`${root}/views/partials/link`, { link: '/addList',
 		text: 'Add' }) : null %>

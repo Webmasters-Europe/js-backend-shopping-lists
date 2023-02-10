@@ -1,5 +1,26 @@
 const User = require('../models/user')
 
+async function usernamesToIds(req, res, next) {
+    const { shareWith } = req.body
+    const shareIds = []
+
+    if (shareWith) {
+        for (const username of shareWith) {
+            let user
+            try {
+                user = await User.findOne({ username })
+            } catch (err) {
+                res.status(400).json({ error: 'Unexpected error while searching for share user' })
+                return
+            }
+            if (user) shareIds.push(user.id)
+        }
+    }
+
+    req.body.shareWith = shareIds
+    next()
+}
+
 async function createIdForList(req, res, next) {
     const { userId } = req.body
     let potentialId
@@ -40,6 +61,29 @@ async function checkListId(req, res, next) {
     }
 
     req.list = targetList
+
+    next()
+}
+
+async function checkShareWith(req, res, next) {
+    const { list } = req
+
+    let sharedUsers
+    try {
+        sharedUsers = await User.find({ lists: { $elemMatch: { $eq: list._id } } })
+    } catch (err) {
+        console.error(err)
+        res.status(400).json({ error: err.message })
+        return
+    }
+
+    const sharedUsernames = []
+    if (sharedUsers) {
+        sharedUsers.forEach((user) => {
+            sharedUsernames.push(user.username)
+        })
+    }
+    req.sharedUsernames = sharedUsernames
 
     next()
 }
@@ -129,6 +173,8 @@ function entryWithName(entryName, targetList) {
 }
 
 module.exports = {
+    usernamesToIds,
+    checkShareWith,
     createIdForList,
     checkListId,
     checkEntryName,

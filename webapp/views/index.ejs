@@ -5,13 +5,12 @@
 	</head>
 	<body class="flex justify-center p-8 bg-gray-50">
 		<div class="max-w-4xl w-full p-8">
-            <%- include(`${root}/views/partials/navbar`, { addLink: true }) %>
+            <%- include(`${root}/views/partials/navbar`, { addLink: true, username: username }) %>
             <div class="grid gap-4 grid-cols-2">
+                <%- include(`${root}/views/partials/shoppingList`, { listId: 'socketTemplate', entries: [{food: ''}], template: true}) %>
                 <% if (typeof lists !== 'undefined') { %>
-                    <% for (const list of lists) { %>
-                        <% for (const [listId, entries] of Object.entries(list)) { %>
-                            <%- include(`${root}/views/partials/shoppingList`, { listId: listId, entries: entries}) %>
-                        <% } %>
+                    <% for (const {listId, listName, entries} of lists) { %>
+                        <%- include(`${root}/views/partials/shoppingList`, { listId: listId, entries: entries}) %>
                     <% } %>
                 <% } %>
             </div>

@@ -5,7 +5,7 @@
 	</head>
 	<body class="flex justify-center p-8 bg-gray-50">
 		<div class="max-w-4xl w-full rounded-lg shadow-lg p-8 h-min">
-			<%- include(`${root}/views/partials/navbar`) %>
+			<%- include(`${root}/views/partials/navbar`, { username: username }) %>
 
 			<div class="space-y-4">
 				<h3 class="text-2xl text-center text-slate-600">Create a new shopping list</h3>
@@ -20,6 +20,12 @@
 								placeholder="list items separated by commas. For example: Cheese, Bread, Water, ..."
 								required
 							></textarea>
+						</div>
+					</div>
+
+                    <div class="-m-0.5 rounded-lg p-0.5">
+						<div>
+							<input name="shareWith" type="text" placeholder="Share with...">
 						</div>
 					</div>
 

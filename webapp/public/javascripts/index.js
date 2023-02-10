@@ -8,6 +8,7 @@ function init() {
         xButtons.forEach((button) => button.addEventListener('click', deleteEntry))
     }
     registerLogoutHandler()
+    deactivateTemplate()
 }
 
 async function deleteList(e) {
@@ -15,10 +16,15 @@ async function deleteList(e) {
 
     const listId = getListId(e.target)
 
-    await fetch(`http://localhost:3000/${listId}`, {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'DELETE',
-    })
+    try {
+        await fetch(`http://localhost:3000/${listId}`, {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'DELETE',
+        })
+    } catch (error) {
+        console.error(error)
+        return
+    }
 
     window.location.reload()
 }
@@ -28,11 +34,15 @@ async function deleteEntry(e) {
 
     const listId = getListId(e.target)
     const entryName = getEntryName(e.target)
-
-    await fetch(`http://localhost:3000/${listId}/${entryName}`, {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'DELETE',
-    })
+    try {
+        await fetch(`http://localhost:3000/${listId}/${entryName}`, {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'DELETE',
+        })
+    } catch (error) {
+        console.error(error)
+        return
+    }
 
     window.location.reload()
 }
@@ -46,6 +56,11 @@ function getListId(target) {
         return target.id
     }
     return getListId(target.parentElement)
+}
+
+function deactivateTemplate() {
+    const template = document.getElementById('socketTemplate')
+    template.style.display = 'none'
 }
 
 init()

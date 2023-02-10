@@ -6,15 +6,19 @@ function init() {
 async function handleSubmit(e) {
     e.preventDefault()
 
-    const body = createJSONBody(e.target)
+    let response
+    try {
+        response = await fetch('http://localhost:3000/addList', {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST',
+            body: createJSONBody(e.target),
+        })
+    } catch (error) {
+        console.error(error)
+        return
+    }
 
-    const res = await fetch('http://localhost:3000/addList', {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST',
-        body,
-    })
-
-    if (`${res.status}`.startsWith('4')) {
+    if (`${response.status}`.startsWith('4')) {
         alert('Error')
         return
     }
