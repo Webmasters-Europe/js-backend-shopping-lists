@@ -7,10 +7,10 @@
 		<div class="max-w-4xl w-full p-8">
             <%- include(`${root}/views/partials/navbar`, { addLink: true, username: username }) %>
             <div class="grid gap-4 grid-cols-2">
-                <%- include(`${root}/views/partials/shoppingList`, { listId: 'socketTemplate', entries: [{food: ''}], template: true}) %>
+                <%- include(`${root}/views/partials/shoppingList`, { listId: 'socketTemplate', listName: 'socketTemplate', entries: [{food: ''}], template: true}) %>
                 <% if (typeof lists !== 'undefined') { %>
                     <% for (const {listId, listName, entries} of lists) { %>
-                        <%- include(`${root}/views/partials/shoppingList`, { listId: listId, entries: entries}) %>
+                        <%- include(`${root}/views/partials/shoppingList`, { listId: listId, listName: listName, entries: entries}) %>
                     <% } %>
                 <% } %>
             </div>

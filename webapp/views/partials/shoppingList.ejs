@@ -1,12 +1,12 @@
 <div id="<%= listId %>" class="rounded-lg shadow p-4 flex flex-col max-w-md space-y-8 bg-white">
-	<h3 class="text-xl font-semibold text-slate-600">My List</h3>
+	<h3 id="listName" class="text-xl font-semibold text-slate-600"><%= listName %></h3>
 
     <ul class="divide-y divide-gray-200">
         <% for (const entry of entries) { %>
             <li class="py-4">
                 <div class="flex items-center space-x-12">
                     <div class="min-w-0 flex-1">
-                        <p class="truncate text-sm font-medium text-gray-900"><%= entry.food %></p>
+                        <p id="foodName" class="truncate text-sm font-medium text-gray-900"><%= entry.food %></p>
                     </div>
                     <div>
                         <%- include(`${root}/views/partials/link`, { link: '#', text: 'X',

@@ -23,10 +23,7 @@ async function deleteList(e) {
         })
     } catch (error) {
         console.error(error)
-        return
     }
-
-    window.location.reload()
 }
 
 async function deleteEntry(e) {
@@ -41,10 +38,7 @@ async function deleteEntry(e) {
         })
     } catch (error) {
         console.error(error)
-        return
     }
-
-    window.location.reload()
 }
 
 function getEntryName(target) {

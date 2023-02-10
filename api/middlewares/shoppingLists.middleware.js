@@ -1,7 +1,7 @@
 const User = require('../models/user')
 
 async function usernamesToIds(req, res, next) {
-    const { shareWith } = req.body
+    const { userId, shareWith } = req.body
     const shareIds = []
 
     if (shareWith) {
@@ -13,7 +13,7 @@ async function usernamesToIds(req, res, next) {
                 res.status(400).json({ error: 'Unexpected error while searching for share user' })
                 return
             }
-            if (user) shareIds.push(user.id)
+            if (user && user.id !== userId) shareIds.push(user.id)
         }
     }
 

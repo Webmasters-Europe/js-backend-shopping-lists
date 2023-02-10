@@ -57,6 +57,11 @@ router.post('/register', [validUsername, validPassword], async (req, res, next) 
         return
     }
 
+    if (!user) {
+        res.json({ error: 'Username unavailable' })
+        return
+    }
+
     createAndSetToken(res, { username: user.username })
     res.redirect('/')
 })

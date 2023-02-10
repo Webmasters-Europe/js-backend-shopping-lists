@@ -80,8 +80,6 @@ router.delete('/:listId', async (req, res) => {
 router.delete('/:listId/:entryName', validEntryName, async (req, res) => {
     const { listId, entryName } = req.params
     const userId = req.user?._id
-    console.log('listId', listId)
-    console.log('entryName', entryName)
     let result
     try {
         const response = await fetch(`http://localhost:3001/api/${userId}/${listId}/${entryName}`, {

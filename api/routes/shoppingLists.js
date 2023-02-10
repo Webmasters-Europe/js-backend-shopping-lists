@@ -100,9 +100,9 @@ router.delete('/:userId/:listId/:entryName', [checkListId, checkEntryName, check
     })
 })
 
-async function createShoppingList(id) {
+async function createShoppingList(id, listName) {
     try {
-        return await ShoppingList.create({ shoppingListId: id, entries: [] })
+        return await ShoppingList.create({ shoppingListId: id, name: listName, entries: [] })
     } catch (error) {
         throw new Error(error.message)
     }

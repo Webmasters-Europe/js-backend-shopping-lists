@@ -16,9 +16,10 @@ socket.on('recieveList', (list) => {
     const ul = newList.querySelector('ul')
     newList.style.display = 'flex'
     newList.id = list.id
+    newList.querySelector('#listName').innerText = list.listName
     for (const entry of list.entries) {
         const newLi = templateLi.cloneNode(true)
-        newLi.childNodes[0].textContent = entry.food
+        newLi.querySelector('#foodName').innerText = entry.food
         newLi.addEventListener('click', deleteEntry)
         ul.appendChild(newLi)
     }
@@ -32,19 +33,7 @@ socket.on('recieveList', (list) => {
 
 socket.on('shoppingList:deleteList', deleteList)
 
-socket.on('shoppingList:deleteListEntry', ({ listId, entryName }) => {
-    console.log('should delete entry')
-
-    const targetList = document.getElementById(listId)
-    if (!targetList) return
-    const lis = Array.from(targetList.querySelectorAll('li'))
-    if (!lis) return
-    lis.forEach((li) => {
-        if (li.childNodes[0].textContent.trim() === entryName) {
-            li.remove()
-        }
-    })
-})
+socket.on('shoppingList:deleteListEntry', ({ listId, entryName }) => deleteListEntry(listId, entryName))
 
 function deleteList(listId) {
     const deletedList = document.getElementById(listId)
@@ -52,4 +41,17 @@ function deleteList(listId) {
     if (!deletedList) return
 
     deletedList.remove()
+}
+
+function deleteListEntry(listId, entryName) {
+    const targetList = document.getElementById(listId)
+    if (!targetList) return
+    const lis = Array.from(targetList.querySelectorAll('li'))
+    if (!lis) return
+    for (const li of lis) {
+        if (li.querySelector('#foodName').innerText.trim() === entryName) {
+            li.remove()
+            break
+        }
+    }
 }
