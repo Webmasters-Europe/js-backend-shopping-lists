@@ -29,13 +29,15 @@ socket.on('recieveList', (list) => {
 
     const deleteButton = newList.querySelector('#Delete')
     deleteButton.addEventListener('click', deleteList)
+    deleteButton.addEventListener('click', removeList)
 })
 
-socket.on('shoppingList:deleteList', deleteList)
+socket.on('shoppingList:deleteList', (listId) => removeList(null, listId))
 
 socket.on('shoppingList:deleteListEntry', ({ listId, entryName }) => deleteListEntry(listId, entryName))
 
-function deleteList(listId) {
+function removeList(e, listId) {
+    if (e) e.preventDefault()
     const deletedList = document.getElementById(listId)
 
     if (!deletedList) return

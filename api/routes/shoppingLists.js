@@ -58,8 +58,10 @@ router.post('/', [usernamesToIds, createIdForList], async (req, res) => {
     const shortenedEntries = shortenEntries(shoppingList.entries)
 
     const responseJSON = shareWith.length > 0
-        ? { id: shoppingList.shoppingListId, entries: shortenedEntries, shareWith }
-        : { id: shoppingList.shoppingListId, entries: shortenedEntries }
+        ? {
+            id: shoppingList.shoppingListId, listName: shoppingList.name, entries: shortenedEntries, shareWith,
+        }
+        : { id: shoppingList.shoppingListId, listName: shoppingList.name, entries: shortenedEntries }
 
     res.json(responseJSON)
 })

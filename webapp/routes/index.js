@@ -35,8 +35,9 @@ router.post('/addList', [checkShareWith, validList], async (req, res) => {
         res.status(400).json({ error: err.message })
         return
     }
+    console.log(result)
 
-    const responseObject = { id: result.id, entries: result.entries }
+    const responseObject = { id: result.id, listName: result.listName, entries: result.entries }
     if (result.shareWith) {
         const io = req.app.get('socket.io')
         const usernameSocketId = req.app.get('username-socketId')
