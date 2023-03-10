@@ -175,7 +175,7 @@ async function shoppingListForId(id, withDependancies = false) {
     let shoppingList = null
 
     try {
-        shoppingList = await ShoppingList.findOne({ userId: id })
+        shoppingList = await ShoppingList.findOne({ shoppingListId: id })
 
         if (shoppingList && withDependancies) {
             shoppingList = await shoppingList.populate('entries')
