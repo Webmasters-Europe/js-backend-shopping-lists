@@ -43,7 +43,7 @@ router.post('/addList', [checkShareWith, validList], async (req, res) => {
         const usernameSocketId = req.app.get('username-socketId')
 
         for (const username of req.body.shareWith) {
-            io.to(usernameSocketId[username]).emit('recieveList', responseObject)
+            io.to(usernameSocketId[username]).emit('receiveList', responseObject)
         }
     }
 

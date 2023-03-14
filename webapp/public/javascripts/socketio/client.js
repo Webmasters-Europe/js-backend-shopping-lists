@@ -9,7 +9,7 @@ socket.on('connect', () => {
     socket.emit('username', username)
 })
 
-socket.on('recieveList', (list) => {
+socket.on('receiveList', (list) => {
     const templateList = document.getElementById('socketTemplate')
     const templateLi = templateList.querySelector('li')
     const newList = templateList.cloneNode(true)
